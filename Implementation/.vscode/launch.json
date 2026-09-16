@@ -7,7 +7,7 @@
             "request": "launch",
             "program": "/home/sehy/natID.RAMDisk/Out/simplexLPSol/Debug/simplexLP",
             "args": [],
-            "cwd": "/home/sehy/natID/natID.Examples/mine/SimplexLP",
+            "cwd": "/home/sehy/natID/natID.Examples/mine/ProjNO_Simplex_Sijaric/Implementation",
             "environment": [
                 {
                     "name": "LD_LIBRARY_PATH",
