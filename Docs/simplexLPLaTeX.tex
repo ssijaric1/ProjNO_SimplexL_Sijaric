@@ -140,6 +140,6 @@ On those random instances the simplex iteration count climbs from 10 to 182 as t
 \section{Conclusion}
 The project implements both major families of linear programming algorithms on a shared sparse-linear-algebra foundation and makes the difference between them visible: the revised simplex factorizes only the basis and moves along the boundary, the interior point method factorizes the normal equations and moves through the interior, and the same window shows both converging to the same optimum on the same model. The benchmark and MPS export extend the comparison beyond what can be drawn, including against an external solver on identical inputs. The natural extensions are recorded in the implementation notes: Forrest--Tomlin basis updates with periodic refactorization, steepest-edge or Devex pricing, the Harris two-pass ratio test, a homogeneous self-dual interior point formulation that could also certify infeasibility, a presolve stage, and full MPS bounds support so the Netlib problems could be read directly.
 
-The source code of the project can be found at \url{https://github.com/ssijaric1/ProjNO_Simplex_Sijaric}.
+The source code of the project can be found at \url{https://github.com/ssijaric1/ProjNO_SimplexL_Sijaric}.
 
 \end{document}

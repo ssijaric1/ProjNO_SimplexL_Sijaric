@@ -76,7 +76,7 @@ cd tests/standalone && ./build_and_run.sh
 ## Installing
 
 Prebuilt installers for Windows, macOS and Linux are on the
-[releases page](https://github.com/ssijaric1/ProjNO_Simplex_Sijaric/releases).
+[releases page](https://github.com/ssijaric1/ProjNO_SimplexL_Sijaric/releases).
 
 | Platform | File | Install |
 |---|---|---|
