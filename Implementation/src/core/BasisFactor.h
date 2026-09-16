@@ -10,10 +10,13 @@
 //      FTRAN:  B  x_B = b      (current basic solution)
 //      BTRAN:  B^T y = c_B     (simplex multipliers / pricing)
 //
-//  sparse::ISolver factors one matrix and offers solveExt() for arbitrary
-//  right-hand sides, but has no transpose solve, so a second solver instance
-//  is loaded with B^T. Both share the same sparsity work per iteration and
-//  keep everything inside natID, as required by the project proposal.
+//  sparse::ISolver factors one matrix and solves for a right-hand side, but
+//  has no transpose solve, so a second solver instance is loaded with B^T.
+//  Both share the same sparsity work per iteration and keep everything inside
+//  natID, as required by the project proposal.
+//
+//  Solving uses setRHS() / solve() / x(), the call sequence used throughout
+//  the SDK's own MatrixTests examples.
 //
 //  Solvers are created fresh at every (re)factorization - the ISolver
 //  interface has no "reset values" call, and this mirrors how the SDK's own
@@ -96,10 +99,32 @@ public:
     }
 
     // w = B^{-1} rhs
-    bool ftran(const double* rhs, double* w) { return _sB->solveExt(rhs, w); }
+    bool ftran(const double* rhs, double* w) { return solveWith(_sB, rhs, w); }
 
     // y = B^{-T} rhs
-    bool btran(const double* rhs, double* y) { return _sBT->solveExt(rhs, y); }
+    bool btran(const double* rhs, double* y) { return solveWith(_sBT, rhs, y); }
+
+private:
+    // setRHS -> solve -> x, as in the SDK's MatrixTests examples. The whole
+    // right-hand side is written every time, so no state carries over between
+    // solves on the same factorization.
+    bool solveWith(sparse::DblSolverReleaser& s, const double* rhs, double* out)
+    {
+        for (int i = 0; i < _m; ++i)
+            s->setRHS(i, rhs[i]);
+
+        if (!s->solve())
+        {
+            const char* err = s->getLastError();
+            _lastError = std::string("solve failed: ") + (err ? err : "?");
+            return false;
+        }
+
+        for (int i = 0; i < _m; ++i)
+            out[i] = s->x(i);
+
+        return true;
+    }
 };
 
 } // namespace lp

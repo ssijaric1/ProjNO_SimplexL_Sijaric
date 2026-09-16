@@ -14,7 +14,7 @@
 //  lower triangle is inserted, exactly like the SDK's own symmetric-matrix
 //  tests - with SolverType::LU as the factorization engine). Predictor and
 //  corrector right-hand sides reuse the same factorization through
-//  solveExt(). If the SPD factorization fails numerically, the solver
+//  setRHS/solve/x. If the SPD factorization fails numerically, the solver
 //  transparently falls back to plain LU on the (mirrored) symmetric matrix.
 //
 //  This is the in-framework "interior point" counterpart for the
@@ -147,9 +147,20 @@ public:
         return true;
     }
 
+    // setRHS -> solve -> x, the call sequence used throughout the SDK's own
+    // MatrixTests examples.
     bool solve(const double* rhs, double* x)
     {
-        return _solver->solveExt(rhs, x);
+        for (int i = 0; i < _m; ++i)
+            _solver->setRHS(i, rhs[i]);
+
+        if (!_solver->solve())
+            return false;
+
+        for (int i = 0; i < _m; ++i)
+            x[i] = _solver->x(i);
+
+        return true;
     }
 
 private:
